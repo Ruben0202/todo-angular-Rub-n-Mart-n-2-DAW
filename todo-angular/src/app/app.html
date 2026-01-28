@@ -1,0 +1,62 @@
+<div class="container">
+  <h1>{{ title }}</h1>
+
+  <!-- Input -->
+  <div class="input-section">
+    <input
+      type="text"
+      [(ngModel)]="newTodoText"
+      [class.error]="newTodoText.length > 100"
+      placeholder="Nueva tarea...">
+
+    <span *ngIf="newTodoText.length > 100" class="error-msg">
+      Máximo 100 caracteres
+    </span>
+
+    <small>{{ newTodoText.length }} / 100</small>
+
+    <button (click)="addTodo()">Añadir</button>
+  </div>
+
+  <!-- Filtros -->
+  <div class="filters">
+    <button
+      [class.active]="currentFilter === 'all'"
+      (click)="currentFilter = 'all'">
+      Todas
+    </button>
+
+    <button
+      [class.active]="currentFilter === 'active'"
+      (click)="currentFilter = 'active'">
+      Activas
+    </button>
+
+    <button
+      [class.active]="currentFilter === 'completed'"
+      (click)="currentFilter = 'completed'">
+      Completadas
+    </button>
+  </div>
+
+  <div *ngIf="todos.length === 0" class="empty-state">
+    No hay tareas. ¡Añade una para empezar!
+  </div>
+
+
+  <!-- Lista -->
+  <ul class="todo-list">
+    <app-todo-item
+      *ngFor="let todo of getFilteredTodos()"
+      [todo]="todo"
+      (toggle)="toggleTodo($event)"
+      (removeTodo)="deleteTodo($event)">
+    </app-todo-item>
+  </ul>
+
+  <!-- Footer -->
+  <div class="footer">
+    <span>{{ getActiveCount() }} tareas pendientes</span>
+    <button (click)="clearCompleted()">Limpiar completadas</button>
+  </div>
+</div>
